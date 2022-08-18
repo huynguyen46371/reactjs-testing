@@ -2,13 +2,13 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/messaging";
 
 const config = {
-  apiKey: "AIzaSyDCwdE_e-xFdCMN-m6c1_0ECFnDZb8UU7w",
-  authDomain: "vbike-c71cb.firebaseapp.com",
-  projectId: "vbike-c71cb",
-  storageBucket: "vbike-c71cb.appspot.com",
-  messagingSenderId: "337667559060",
-  appId: "1:337667559060:web:220c623c61dd0a46d16e81",
-  measurementId: "G-LZYBDHNPTC",
+  apiKey: "AIzaSyD1UnYMTWjjgV57Zie8Fh4GZkTW2nk98hY",
+  authDomain: "maby-8fe31.firebaseapp.com",
+  projectId: "maby-8fe31",
+  storageBucket: "maby-8fe31.appspot.com",
+  messagingSenderId: "401440894126",
+  appId: "1:401440894126:web:cdbb901ad90fb9e718d13f",
+  measurementId: "G-JRZE23W3EC",
 };
 
 firebase.initializeApp(config);
