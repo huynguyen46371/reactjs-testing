@@ -1,97 +1,48 @@
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
-import "antd/dist/antd.css";
-import axios from "axios";
-import {
-  getAuth,
-  RecaptchaVerifier,
-  signInWithPhoneNumber,
-} from "firebase/auth";
-import { useEffect, useState } from "react";
-import "./App.css";
+import { gapi } from "gapi-script";
+import { useEffect } from "react";
+import { GoogleLogin } from "react-google-login";
 import { requestFirebaseNotificationPermission } from "./firebase";
-import PaymentForm from "./PaymentForm";
 
-const stripePromise = loadStripe(
-  "pk_test_51LQlJUGgUSYiE8h9tAopzaSKuTesQXGwKdNCSHebTxYdeA3jqKkrXOrvZxUahAdlwmsuNd5XnIG3ZRUmYObmG0o200rD60B9Oj"
-);
-
-const API = axios.create({
-  baseURL: "http://localhost:5000/",
-  timeout: 100000,
-});
+const clientId =
+  "503680745865-fmij5kcfrluhid1pr05onmb19cb366gf.apps.googleusercontent.com";
 
 function App() {
-  const [code, setCode] = useState("");
-  const [confirm, setConfirm] = useState("");
-  const fcmToken = localStorage.getItem("fcmToken");
+  const errorResponseGoogle = (response) => {
+    console.log("f", response);
+  };
 
-  useEffect(() => {
+  const successResponseGoogle = (response) => {
+    console.log("s", response);
+  };
+
+  const home = async () => {
     requestFirebaseNotificationPermission().then((fcm) => {
       console.log("🚀 ~ fcm", fcm);
-      localStorage.setItem("fcmToken", fcm);
+      localStorage.setItem("fcm", fcm);
     });
+  };
+
+  useEffect(() => {
+    gapi.load("client:auth2", () => {
+      gapi.client.init({
+        clientId,
+        scope: "",
+      });
+    });
+
+    home();
   }, []);
 
-  const handleFacebookLogin = async (response) => {
-    const login = await API.post("/auth/facebook", {
-      accessToken: response.accessToken,
-      fcmToken,
-    });
-    console.log("🚀 ~ login Facebook", login.data);
-  };
-
-  const handleGoogleLogin = async (response) => {
-    const login = await API.post("/auth/google", {
-      accessToken: response.accessToken,
-      fcmToken,
-    });
-    console.log("🚀 ~ login Google", login.data);
-  };
-
-  const onFinish = async ({ remember, ...values }) => {
-    console.log("🚀 ~ values", values);
-    // const login = await API.post("/auth/login", { ...values, fcmToken });
-    // console.log("🚀 ~ login", login.data);
-    const auth = getAuth();
-    window.recaptchaVerifier = new RecaptchaVerifier(
-      "recaptcha-container",
-      {
-        size: "normal",
-        callback: (response) => {
-          // reCAPTCHA solved, allow signInWithPhoneNumber.
-          // ...
-        },
-        "expired-callback": () => {
-          // Response expired. Ask user to solve reCAPTCHA again.
-          // ...
-        },
-      },
-      auth
-    );
-
-    const appVerifier = window.recaptchaVerifier;
-
-    signInWithPhoneNumber(auth, values.email, appVerifier)
-      .then((confirmationResult) => {
-        console.log("🚀 ~ confirmationResult", confirmationResult);
-        console.log("🚀 ~ verificationId", confirmationResult.verificationId);
-        setConfirm(confirmationResult);
-        // SMS sent. Prompt user to type the code from the message, then sign the
-        // user in with confirmationResult.confirm(code).
-        // ...
-      })
-      .catch((error) => {
-        console.log("🚀 ~ error", error);
-        // Error; SMS not sent
-        // ...
-      });
-  };
-
   return (
-    <Elements stripe={stripePromise}>
-      <PaymentForm />
-    </Elements>
+    <div>
+      <GoogleLogin
+        clientId={clientId}
+        buttonText="Login"
+        onSuccess={successResponseGoogle}
+        onFailure={errorResponseGoogle}
+        cookiePolicy="single_host_origin"
+      />
+    </div>
   );
 }
 

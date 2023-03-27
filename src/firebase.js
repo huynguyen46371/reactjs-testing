@@ -2,13 +2,13 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/messaging";
 
 const config = {
-  apiKey: "AIzaSyD1UnYMTWjjgV57Zie8Fh4GZkTW2nk98hY",
-  authDomain: "maby-8fe31.firebaseapp.com",
-  projectId: "maby-8fe31",
-  storageBucket: "maby-8fe31.appspot.com",
-  messagingSenderId: "401440894126",
-  appId: "1:401440894126:web:cdbb901ad90fb9e718d13f",
-  measurementId: "G-JRZE23W3EC",
+  apiKey: "AIzaSyDRhnn2US1qsJFviDHWIytnswB8bRqbe_M",
+  authDomain: "t-message-e4e09.firebaseapp.com",
+  projectId: "t-message-e4e09",
+  storageBucket: "t-message-e4e09.appspot.com",
+  messagingSenderId: "503680745865",
+  appId: "1:503680745865:web:5c9098a54701b7f158a158",
+  measurementId: "G-PEFZ3M51T8",
 };
 
 firebase.initializeApp(config);
